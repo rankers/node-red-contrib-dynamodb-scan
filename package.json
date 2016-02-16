@@ -1,0 +1,17 @@
+{
+  "name": "ddbin",
+  "version": "0.0.1",
+  "description": "A Node-RED node to read from Amazon DynamoDB",
+  "main": "index.js",
+  "scripts": {
+
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "aws-sdk": "2.0.*",
+    "dynamodb-data-types": "0.2.*"
+  },
+  "keywords": ["node-red", "dyanmodb", "ddb", "amazon", "aws"],
+  "author": "Richard Ankers",
+  "license": "ISC"
+}
