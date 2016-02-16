@@ -11,6 +11,11 @@
     "aws-sdk": "2.0.*",
     "dynamodb-data-types": "0.2.*"
   },
+  "node-red": {
+    "nodes": {
+      "ddbin": "index.js"
+    }
+  },
   "keywords": ["node-red", "dyanmodb", "ddb", "amazon", "aws"],
   "author": "Richard Ankers",
   "license": "ISC"
