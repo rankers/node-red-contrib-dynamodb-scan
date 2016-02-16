@@ -1,19 +1,18 @@
 {
   "name": "ddbin",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "A Node-RED node to read from Amazon DynamoDB",
   "main": "index.js",
   "scripts": {
-
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "aws-sdk": "2.0.*",
+    "aws-sdk": "^2.2.32",
     "dynamodb-data-types": "0.2.*"
   },
   "node-red": {
     "nodes": {
-      "ddbin": "index.js"
+      "ddb-in": "index.js"
     }
   },
   "keywords": ["node-red", "dyanmodb", "ddb", "amazon", "aws"],

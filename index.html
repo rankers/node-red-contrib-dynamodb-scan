@@ -11,7 +11,7 @@
   limitations under the License.
 -->
 
-<script type="text/x-red" data-template-name="ddb out">
+<script type="text/x-red" data-template-name="ddb-in">
     <div class="form-row">
         <label for="node-input-accessKey"><i class="fa fa-th"></i> Access Key</label>
         <input type="text" id="node-input-accessKey">
@@ -34,12 +34,20 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="ddb in">
-    <p>A Amazon DynamoDB input node.</p>
+<script type="text/x-red" data-help-name="ddb-in">
+    <p>An Amazon DynamoDB scan node.</p>
+
+    <h3>Input</h3>
+
+    <p>Payload must contain key, value and an operator</p>
+
+    <h3>Output</h3>
+
+    <p>Payload contains list of objects that match scan parameters</p>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType("ddb in", {
+    RED.nodes.registerType("ddb-in", {
         category: "storage-input",
         color: "#ffaaaa",
         defaults: {
@@ -51,7 +59,7 @@
             accessKey: { type: "text" },
             secretAccessKey: { type: "password" }
         },
-        inputs: 0,
+        inputs: 1,
         outputs: 1,
         icon: "db.png",
         align: "right",

@@ -5,45 +5,67 @@ module.exports = function(RED) {
 
     function DDBInNode(n) {
         RED.nodes.createNode(this, n);
-        this.region = n.region || "us-east-1";
-        this.table = n.table;
+        var node = this;
+        node.region = n.region || "us-east-1";
+        node.table = n.table;
 
-        aws.config.update({ accessKeyId: this.credentials.accessKey,
-            secretAccessKey: this.credentials.secretAccessKey,
-            region: this.region });
+        aws.config.update({
+            accessKeyId: node.credentials.accessKey,
+            secretAccessKey: node.credentials.secretAccessKey,
+            region: node.region
+        });
 
-        var ddb = new aws.DynamoDB();
+        var ddb = new aws.DynamoDB.DocumentClient();
+
+        node.on("input", function(msg) {
+            queryTable(msg.payload)
+        });
+
+        // Expects:
+        // {
+        //  key: "nme",
+        //  reservedKey: "name",
+        //  value: true,
+        //  operator: "="
+        // }
+        // Just one key / value at the moment
+        function queryTable(args){
+            var key = "#" + args.key;
+            var reservedKey = args.reservedKey
+            var value = args.value;
+            var operator = args.operator;
+            var expressionAttributeNames = {}
+            expressionAttributeNames[key] = reservedKey
+
+            var expressionAttributeValues = {}
+            expressionAttributeValues[":value"] = value
+
+            var params = {
+                TableName: n.table,
+                FilterExpression: key + " " + operator + " :value",
+                ExpressionAttributeNames: expressionAttributeNames,
+                ExpressionAttributeValues: expressionAttributeValues
+            };
+
+            ddb.scan(params, function(err,data){
+                if(err){
+                    console.error(err, err.stack);
+                } else {
+                    sendData(n.table, data)
+              }
+          });
+        };
 
         var sendData = function (topic, payload) {
-
-            console.log(topic, payload);
-            
             var msg = {
                 topic: topic,
                 payload: payload
             };
             node.send(msg);
         };
-
-        var params = {
-            TableName: n.table,
-            ProjectionExpression: "user_id, device_token",
-            FilterExpression: "is_employee = :bool",
-            ExpressionAttributeValues: {
-                ":bool":true
-            }
-        };
-
-        docClient.scan(params, function(err,data){
-            if(err){
-                console.error(err, err.stack);
-            } else {
-                sendData(n.table, data)
-          }
-      });
     }
 
-    RED.nodes.registerType("ddb in", DDBInNode, {
+    RED.nodes.registerType("ddb-in", DDBInNode, {
         credentials: {
             accessKey: { type:"text" },
             secretAccessKey: { type: "password" }
